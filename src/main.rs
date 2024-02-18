@@ -1,5 +1,6 @@
 mod config_parser;
 mod classification;
+mod xlsx;
 
 use std::collections::HashMap;
 use std::env;
@@ -7,8 +8,10 @@ use std::error::Error;
 use std::fs::File;
 use std::io::Read;
 use std::path::Path;
+use rust_xlsxwriter::Workbook;
 use crate::classification::classify;
 use crate::config_parser::parse_config;
+use crate::xlsx::Writer;
 
 fn main() -> Result<(), Box<dyn Error>> {
     let args: Vec<String> = env::args().collect();
@@ -21,10 +24,14 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let config = parse_config().unwrap();
     let mut map: HashMap<String, f64> = HashMap::new();
+    let mut workbook = Workbook::new();
+    let worksheet = workbook.add_worksheet();
+    let mut writer = Writer::new();
 
     for line in lines {
         if line.trim() != ";;;;" && !line.trim().ends_with(";;;") {
             let result = classify(config.clone(), line.to_string());
+            writer.write_row(line.trim().to_string(), result.0.clone(), worksheet);
             if map.get(&result.0).is_none() {
                 map.insert(result.0, result.1);
             } else {
@@ -34,5 +41,6 @@ fn main() -> Result<(), Box<dyn Error>> {
             }
         }
     }
+    workbook.save("household.xlsx")?;
     Ok(())
 }
