@@ -23,8 +23,10 @@ pub fn classify(config: Table, line: String) -> (String, f64) {
         }
     }
     println!("What is the category of this transaction?");
-    let possible_classifications = classifications.keys()
+    let mut possible_classifications = classifications.keys()
         .map(|x|x).collect::<Vec<&String>>();
+    let unc = "Unclassified".to_string();
+    possible_classifications.push(&unc);
     let selection = Select::new()
         .with_prompt(line_split[3])
         .items(&*possible_classifications)

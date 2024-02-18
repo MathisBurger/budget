@@ -36,6 +36,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             && !line.starts_with(";")
             && !line.contains("tze Girokonto\";\"Zeitraum: 30 Tage")
             && !line.starts_with("\"Buchungstag\";\"Wertstellung (Valuta)\"")
+            && !line.starts_with("\"Alter Kontostand")
             && line.trim() != ""
         {
             let result = classify(config.clone(), line.to_string());
