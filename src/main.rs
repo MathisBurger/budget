@@ -8,6 +8,7 @@ use std::error::Error;
 use std::fs::File;
 use std::io::Read;
 use std::path::Path;
+use colored::Colorize;
 use rust_xlsxwriter::Workbook;
 use crate::classification::classify;
 use crate::config_parser::parse_config;
@@ -27,6 +28,8 @@ fn main() -> Result<(), Box<dyn Error>> {
     let mut workbook = Workbook::new();
     let worksheet = workbook.add_worksheet();
     let mut writer = Writer::new();
+    writer.write_headline(worksheet).expect("CANNOT WRITE HEADLINE");
+    writer.adjust_width(worksheet).expect("CANNOT ADJUST WIDTH");
 
     for line in lines {
         if line.trim() != ";;;;"
@@ -51,5 +54,14 @@ fn main() -> Result<(), Box<dyn Error>> {
         }
     }
     workbook.save("household.xlsx")?;
+
+    for key in map.keys() {
+        let value = map.get(key).unwrap();
+        if *value > 0.0 {
+            println!("{}: {} EUR", key, map.get(key).unwrap().to_string().green());
+        } else {
+            println!("{}: {} EUR", key, map.get(key).unwrap().to_string().red());
+        }
+    }
     Ok(())
 }
