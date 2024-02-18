@@ -1,6 +1,8 @@
 use toml::Table;
 use dialoguer::Select;
 
+/// Classifies specific lines dynamically through user inputs
+/// or preconfigured rules
 pub fn classify(config: Table, line: String) -> (String, f64) {
     let classifications = &config["classifications"].as_table().unwrap();
     let line_split = line.split(";").collect::<Vec<&str>>();

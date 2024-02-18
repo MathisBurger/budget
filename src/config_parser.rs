@@ -5,6 +5,7 @@ use std::io::Read;
 use std::path::Path;
 use toml::Table;
 
+/// Parses the config from toml
 pub fn parse_config() -> Result<Table, Box<dyn Error>> {
     let args: Vec<String> = env::args().collect();
     let path = Path::new(&args[1]);

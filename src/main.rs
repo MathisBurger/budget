@@ -14,6 +14,7 @@ use crate::classification::classify;
 use crate::config_parser::parse_config;
 use crate::xlsx::Writer;
 
+/// Handles all the workflow of the application
 fn main() -> Result<(), Box<dyn Error>> {
     let args: Vec<String> = env::args().collect();
     let path = Path::new(&args[2]);

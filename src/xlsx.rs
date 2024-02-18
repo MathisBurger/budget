@@ -8,6 +8,7 @@ pub struct Writer {
 
 impl Writer {
 
+    /// Creates a new instance
     pub fn new() -> Self {
         let greater = ConditionalFormatCell::new()
             .set_rule(ConditionalFormatCellRule::GreaterThan(0))
@@ -28,6 +29,7 @@ impl Writer {
         }
     }
 
+    /// Writes a specific data row to the sheet
     pub fn write_row(&mut self, data: String, classification: String, worksheet: &mut Worksheet) {
         let split: Vec<&str> = data.split(";").collect();
         let mut c: u16 = 0;
@@ -54,6 +56,7 @@ impl Writer {
         self.row_count += 1;
     }
 
+    /// Writes the headline to the sheet
     pub fn write_headline(&mut self, worksheet: &mut Worksheet) -> Result<(), XlsxError> {
         worksheet.write(0, 0, "Buchungstag")?;
         worksheet.write(0, 1, "Wertstellung")?;
@@ -64,6 +67,7 @@ impl Writer {
         Ok(())
     }
 
+    /// Adjusts the width of the worksheet
     pub fn adjust_width(&mut self, worksheet: &mut Worksheet) -> Result<(), XlsxError> {
         worksheet.set_column_width(0, 14.0)?;
         worksheet.set_column_width(1, 14.0)?;
