@@ -1,4 +1,4 @@
-use rust_xlsxwriter::{Color, ConditionalFormatCell, ConditionalFormatCellRule, Format, Workbook, Worksheet, XlsxError};
+use rust_xlsxwriter::{Color, ConditionalFormatCell, ConditionalFormatCellRule, Format, Worksheet, XlsxError};
 
 pub struct Writer {
     row_count: u32,
@@ -50,7 +50,7 @@ impl Writer {
         }
         worksheet.add_conditional_format(0, 4, 65536, 4, &self.lower_format)
             .expect("CANNOT ADD FORMATTING");
-        worksheet.add_conditional_format(0, 4, 65536, 4, &self.lower_format)
+        worksheet.add_conditional_format(0, 4, 65536, 4, &self.greater_format)
             .expect("CANNOT ADD FORMATTING");
         worksheet.write(self.row_count, c, classification).expect("ERROR WHILE WRITING");
         self.row_count += 1;
