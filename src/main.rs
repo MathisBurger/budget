@@ -29,7 +29,15 @@ fn main() -> Result<(), Box<dyn Error>> {
     let mut writer = Writer::new();
 
     for line in lines {
-        if line.trim() != ";;;;" && !line.trim().ends_with(";;;") {
+        if line.trim() != ";;;;"
+            && !line.trim().ends_with(";;;")
+            && !line.starts_with("\"Neuer Kontostand")
+            && !line.starts_with("Buchungstag")
+            && !line.starts_with(";")
+            && !line.contains("tze Girokonto\";\"Zeitraum: 30 Tage")
+            && !line.starts_with("\"Buchungstag\";\"Wertstellung (Valuta)\"")
+            && line.trim() != ""
+        {
             let result = classify(config.clone(), line.to_string());
             writer.write_row(line.trim().to_string(), result.0.clone(), worksheet);
             if map.get(&result.0).is_none() {

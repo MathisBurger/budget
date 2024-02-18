@@ -5,7 +5,8 @@ pub fn classify(config: Table, line: String) -> (String, f64) {
     let classifications = &config["classifications"].as_table().unwrap();
     let line_split = line.split(";").collect::<Vec<&str>>();
     let mut cleaned_line = line_split[4]
-        .replace(".", "");
+        .replace(".", "")
+        .replace("\"", "");
     cleaned_line = cleaned_line.replace(",", ".")
         .trim().parse().unwrap();
     let float_value: f64 = cleaned_line.parse().unwrap();
