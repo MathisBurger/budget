@@ -1,6 +1,7 @@
 mod config_parser;
 mod classification;
 
+use std::collections::HashMap;
 use std::env;
 use std::error::Error;
 use std::fs::File;
@@ -19,11 +20,18 @@ fn main() -> Result<(), Box<dyn Error>> {
     let lines = contents.split("\n").collect::<Vec<&str>>();
 
     let config = parse_config().unwrap();
+    let mut map: HashMap<String, f64> = HashMap::new();
+
     for line in lines {
-        // booking
         if line.trim() != ";;;;" && !line.trim().ends_with(";;;") {
             let result = classify(config.clone(), line.to_string());
-            print!("{} {}", result.0, result.1);
+            if map.get(&result.0).is_none() {
+                map.insert(result.0, result.1);
+            } else {
+                let mut value = map.get(&result.0).unwrap().clone();
+                value += result.1;
+                map.insert(result.0,  value);
+            }
         }
     }
     Ok(())

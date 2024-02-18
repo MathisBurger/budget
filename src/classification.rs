@@ -1,4 +1,5 @@
 use toml::Table;
+use dialoguer::Select;
 
 pub fn classify(config: Table, line: String) -> (String, f64) {
     let classifications = &config["classifications"].as_table().unwrap();
@@ -20,7 +21,13 @@ pub fn classify(config: Table, line: String) -> (String, f64) {
             }
         }
     }
-
-    // Dynamic classification
-    (String::new(), float_value)
+    println!("What is the category of this transaction?");
+    let possible_classifications = classifications.keys()
+        .map(|x|x).collect::<Vec<&String>>();
+    let selection = Select::new()
+        .with_prompt(line_split[3])
+        .items(&*possible_classifications)
+        .interact()
+        .unwrap();
+    (possible_classifications.get(selection).unwrap().to_string(), float_value)
 }
